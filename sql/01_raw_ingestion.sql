@@ -1,0 +1,6 @@
+-- Raw CSV files were ingested into PostgreSQL using DBeaver
+-- Tables created in public schema:
+-- customers
+-- orders
+-- products
+-- sales
