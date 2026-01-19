@@ -1,0 +1,86 @@
+-- EDA 1:
+-- Row counts per table
+SELECT 'orders' AS table_name, count(*) AS rows FROM clean.orders
+UNION ALL
+SELECT 'customers', count(*) FROM public.customers
+UNION ALL
+SELECT 'products', count(*) FROM public.products
+UNION ALL
+SELECT 'sales', count(*) FROM public.sales;
+
+-- Date coverage of orders
+SELECT
+  MIN(order_date) AS first_order_date,
+  MAX(order_date) AS last_order_date,
+  COUNT(distinct order_date) AS active_days
+FROM clean.orders;
+
+-- EDA 2: Overall dataset scale and revenue overview
+SELECT
+	COUNT (DISTINCT order_id) AS total_orders,
+	COUNT (*) AS total_line_items,
+	SUM (quantity) AS total_units_sold,
+	SUM(total_price) AS total_rev,
+	AVG(total_price) AS avg_line_item_rev
+FROM sales;
+
+-- EDA 3: Order-Level Metrics (AOV, Items per order)
+SELECT
+	COUNT (DISTINCT order_id) AS total_orders,
+	ROUND(SUM (total_price) * 1.0/ COUNT (DISTINCT order_id),2) AS avg_order_value,
+	ROUND(SUM (quantity) * 1.0/COUNT (DISTINCT order_id),2) AS avg_items_per_order
+FROM sales;
+
+-- EDA 4: Revenue Over Time
+SELECT *
+FROM sales;
+SELECT *
+FROM clean.orders;
+
+SELECT o.order_date, SUM(s.total_price) AS daily_rev
+FROM sales s
+JOIN clean.orders o
+	ON s.order_id = o.order_id
+GROUP BY o.order_date
+ORDER BY o.order_date;
+
+-- EDA 4b: Monthly revenue trend
+SELECT
+  date_trunc('month', o.order_date) AS month,
+  SUM(s.total_price) AS monthly_revenue
+FROM sales s
+JOIN clean.orders o
+  ON s.order_id = o.order_id
+GROUP BY month
+ORDER BY month;
+
+-- EDA 5a: Revenue and units sold by product category
+SELECT p.product_name, SUM(s.quantity) AS units_sold, SUM(s.total_price) AS total_rev
+FROM sales s
+JOIN products p
+	ON s.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY total_rev DESC;
+
+-- EDA 5b: Top products by units sold
+SELECT p.product_name, SUM(s.quantity) AS units_sold, SUM(s.total_price) AS total_rev
+FROM sales s
+JOIN products p
+	ON s.product_id = p.product_id
+GROUP BY p.product_name
+ORDER BY units_sold DESC
+LIMIT 10; 
+
+-- EDA 6: Top customers by revenue
+SELECT *
+FROM sales;
+SELECT *
+FROM clean.orders;
+
+SELECT o.customer_id, SUM(total_price) AS total_rev, COUNT(DISTINCT o.order_id) AS total_orders
+FROM sales s
+JOIN clean.orders o 
+	ON  s.order_id = o.order_id
+GROUP BY o.customer_id
+ORDER BY total_rev DESC;
+
