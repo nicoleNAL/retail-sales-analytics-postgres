@@ -1,5 +1,7 @@
--- EDA 1:
--- Row counts per table
+-- Exploratory Data Analysis (EDA)
+-- This file contains descriptive analysis queries used to understand dataset scale, revenue trends, product performance, and customer behavior.
+
+-- EDA 1a: Row counts per table
 SELECT 'orders' AS table_name, count(*) AS rows FROM clean.orders
 UNION ALL
 SELECT 'customers', count(*) FROM public.customers
@@ -8,7 +10,7 @@ SELECT 'products', count(*) FROM public.products
 UNION ALL
 SELECT 'sales', count(*) FROM public.sales;
 
--- Date coverage of orders
+-- EDA 1b: Date coverage of orders
 SELECT
   MIN(order_date) AS first_order_date,
   MAX(order_date) AS last_order_date,
