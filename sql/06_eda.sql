@@ -94,3 +94,16 @@ JOIN clean.orders o
 GROUP BY o.customer_id
 ORDER BY total_rev DESC;
 
+-- EDA 7: Order composition
+SELECT
+  o.order_id,
+  o.order_date,
+  COUNT(DISTINCT s.product_id) AS distinct_products,
+  SUM(s.quantity) AS total_items,
+  SUM(s.total_price) AS order_revenue
+FROM clean.orders o
+JOIN public.sales s
+  ON o.order_id = s.order_id
+GROUP BY o.order_id, o.order_date
+ORDER BY order_revenue DESC;
+
