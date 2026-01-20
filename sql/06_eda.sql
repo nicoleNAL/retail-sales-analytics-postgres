@@ -73,6 +73,14 @@ GROUP BY p.product_name
 ORDER BY units_sold DESC
 LIMIT 10; 
 
+-- EDA 5c: Revenue and units sold by product category
+SELECT p.product_type, SUM(s.quantity) AS units_sold, SUM(s.total_price) AS total_rev
+FROM sales s
+JOIN products p
+	ON s.product_id = p.product_id
+GROUP BY p.product_type
+ORDER BY total_rev DESC; 
+
 -- EDA 6: Top customers by revenue
 SELECT *
 FROM sales;
