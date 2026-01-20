@@ -11,3 +11,8 @@ Project Structure
 04_clean_products.sql — Clean and standardize product data
 05_analysis_queries.sql — Core analytical queries
 06_eda.sql — Exploratory data analysis supporting business insights
+
+How to Reproduce
+1. Load raw CSV files into PostgreSQL using DBeaver or psql
+2. Run scripts in numerical order (01 → 06)
+3. Analysis queries reference cleaned tables in the clean schema
