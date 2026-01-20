@@ -16,7 +16,7 @@ This project uses a publicly available retail sales dataset sourced from Kaggle 
 
 ## How to Reproduce
 
-1. Load raw CSV files into PostgreSQL using DBeaver or psql  
-2. Run scripts in numerical order (01 → 06)  
+1. Load raw CSV files into PostgreSQL using DBeaver 
+2. Run scripts in numerical order 
 3. Analysis queries reference cleaned tables in the clean schema  
 
