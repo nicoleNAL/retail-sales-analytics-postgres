@@ -26,12 +26,26 @@ SELECT
 	AVG(total_price) AS avg_line_item_rev
 FROM sales;
 
--- EDA 3: Order-Level Metrics (AOV, Items per order)
+-- EDA 3a: Order-Level Metrics (AOV, Items per order)
+
 SELECT
 	COUNT (DISTINCT order_id) AS total_orders,
 	ROUND(SUM (total_price) * 1.0/ COUNT (DISTINCT order_id),2) AS avg_order_value,
 	ROUND(SUM (quantity) * 1.0/COUNT (DISTINCT order_id),2) AS avg_items_per_order
 FROM sales;
+
+-- EDA 3b: Order composition
+SELECT
+  o.order_id,
+  o.order_date,
+  COUNT(DISTINCT s.product_id) AS distinct_products,
+  SUM(s.quantity) AS total_items,
+  SUM(s.total_price) AS order_revenue
+FROM clean.orders o
+JOIN public.sales s
+  ON o.order_id = s.order_id
+GROUP BY o.order_id, o.order_date
+ORDER BY order_revenue DESC;
 
 -- EDA 4: Revenue Over Time
 SELECT *
@@ -88,16 +102,5 @@ FROM sales s
 	ORDER BY total_rev DESC
 	LIMIT 20;
 
--- EDA 7: Order composition
-SELECT
-  o.order_id,
-  o.order_date,
-  COUNT(DISTINCT s.product_id) AS distinct_products,
-  SUM(s.quantity) AS total_items,
-  SUM(s.total_price) AS order_revenue
-FROM clean.orders o
-JOIN public.sales s
-  ON o.order_id = s.order_id
-GROUP BY o.order_id, o.order_date
-ORDER BY order_revenue DESC;
+
 
