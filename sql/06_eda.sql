@@ -82,17 +82,19 @@ GROUP BY p.product_type
 ORDER BY total_rev DESC; 
 
 -- EDA 6: Top customers by revenue
-SELECT *
-FROM sales;
-SELECT *
-FROM clean.orders;
+SELECT * FROM customers;
+SELECT * FROM sales;
+SELECT * FROM clean.orders;
 
-SELECT o.customer_id, SUM(total_price) AS total_rev, COUNT(DISTINCT o.order_id) AS total_orders
+SELECT  c.customer_name, o.customer_id, SUM(total_price) AS total_rev, COUNT(DISTINCT o.order_id) AS total_orders
 FROM sales s
-JOIN clean.orders o 
-	ON  s.order_id = o.order_id
-GROUP BY o.customer_id
-ORDER BY total_rev DESC;
+	JOIN clean.orders o 
+		ON  s.order_id = o.order_id
+	JOIN customers c 
+		ON  c.customer_id = o.customer_id
+	GROUP BY o.customer_id, c.customer_name
+	ORDER BY total_rev DESC
+	LIMIT 20;
 
 -- EDA 7: Order composition
 SELECT
