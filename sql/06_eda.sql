@@ -56,14 +56,14 @@ JOIN clean.orders o
 GROUP BY month
 ORDER BY month;
 
--- EDA 5a: Top 25 products by Revenue
+-- EDA 5a: Top 10 Products by Revenue
 SELECT p.product_name, SUM(s.quantity) AS units_sold, SUM(s.total_price) AS total_rev
 FROM sales s
 JOIN products p
 	ON s.product_id = p.product_id
 GROUP BY p.product_name
 ORDER BY total_rev DESC
-LIMIT 25; 
+LIMIT 10; 
 
 -- EDA 5b: Revenue and units sold by product category
 SELECT p.product_type, SUM(s.quantity) AS units_sold, SUM(s.total_price) AS total_rev
