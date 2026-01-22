@@ -26,26 +26,13 @@ SELECT
 	AVG(total_price) AS avg_line_item_rev
 FROM sales;
 
--- EDA 3a: Order-Level Metrics (AOV, Items per order)
-
+-- EDA 3: Average delivery time per month
 SELECT
-	COUNT (DISTINCT order_id) AS total_orders,
-	ROUND(SUM (total_price) * 1.0/ COUNT (DISTINCT order_id),2) AS avg_order_value,
-	ROUND(SUM (quantity) * 1.0/COUNT (DISTINCT order_id),2) AS avg_items_per_order
-FROM sales;
-
--- EDA 3b: Order composition
-SELECT
-  o.order_id,
-  o.order_date,
-  COUNT(DISTINCT s.product_id) AS distinct_products,
-  SUM(s.quantity) AS total_items,
-  SUM(s.total_price) AS order_revenue
-FROM clean.orders o
-JOIN public.sales s
-  ON o.order_id = s.order_id
-GROUP BY o.order_id, o.order_date
-ORDER BY order_revenue DESC;
+	TO_CHAR(order_date::date, 'YYYY-MM') AS order_month,
+	ROUND(AVG(delivery_date::date - order_date::date),2) AS avg_del_days
+FROM orders
+GROUP BY 1
+ORDER BY 1;
 
 -- EDA 4: Revenue Over Time
 SELECT *
